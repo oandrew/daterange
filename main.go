@@ -35,6 +35,8 @@ var stepFlag = flag.Duration("s", 10*time.Minute, "step")
 
 var formatFlag = flag.String("f", "s", "format")
 
+var delimiterFlag = flag.String("d", " ", "delimiter")
+
 func format(t time.Time) string {
 	switch *formatFlag {
 	case "s":
@@ -67,6 +69,11 @@ func main() {
 
 	step := *stepFlag
 
+	delimiter := *delimiterFlag
+	if delimiter == "tab" {
+		delimiter = "\t"
+	}
+
 	for ts := start.Round(step); ts.Before(end); ts = ts.Add(step) {
 		t1 := ts
 		t2 := ts.Add(step)
@@ -74,7 +81,7 @@ func main() {
 			t2 = end
 		}
 
-		fmt.Println(format(t1), format(t2))
+		fmt.Printf("%s%s%s\n", format(t1), delimiter, format(t2))
 
 	}
 
